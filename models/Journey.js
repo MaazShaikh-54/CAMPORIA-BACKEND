@@ -1,4 +1,6 @@
-const bookingSchema = new mongoose.Schema(
+import mongoose from "mongoose";
+
+const journeySchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -9,6 +11,11 @@ const bookingSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Campsite",
       required: true,
+    },
+    journeyId: {
+      type: String,
+      required: true,
+      unique: true,
     },
     checkIn: {
       type: Date,
@@ -31,10 +38,15 @@ const bookingSchema = new mongoose.Schema(
       enum: ["pending", "paid"],
       default: "pending",
     },
+    status: {
+      type: String,
+      enum: ["upcoming", "completed", "cancelled"],
+      default: "upcoming",
+    },
   },
   {
     timestamps: true,
-  },
+  }
 );
 
-export default mongoose.model("Booking", bookingSchema);
+export default mongoose.model("Journey", journeySchema);
