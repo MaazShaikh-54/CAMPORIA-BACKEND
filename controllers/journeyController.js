@@ -1,5 +1,6 @@
 import Journey from "../models/Journey.js";
 import Campsite from "../models/Campsite.js";
+import { getDemandMultiplier } from "../utils/pricing.js";
 import { calculatePrice } from "../services/pricingService.js";
 import { checkAvailability } from "../services/availabilityService.js";
 import { generateJourneyId } from "../utils/helpers.js";
@@ -21,11 +22,13 @@ export const createJourney = async (req, res) => {
     if (!camp) {
       return res.status(404).json({ message: "Campsite not found" });
     }
+    
+    const campsiteData = await Campsite.findById(campsite);
 
-    const price = camp.price;
+    const demandMultiplier = await getDemandMultiplier(campsite, checkIn);
 
     const totalPrice = calculatePrice({
-      price,
+      price: campsiteData.price * demandMultiplier,
       checkIn,
       checkOut,
       personCount,
