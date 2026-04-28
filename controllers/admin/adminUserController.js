@@ -3,12 +3,12 @@ import User from "../../models/User.js";
 export const getUsers = async (req, res) => {
   try {
     console.log("USER:", req.user);
-    const user = await User.find();
+    const users = await User.find();
 
     if (users.length === 0) {
       return res.status(404).json({ message: "Users not found" });
     }
-    res.json(user);
+    res.json(users);
   } catch (error) {
     console.error("Error fetching users:", error);
     res.status(500).json({ message: error.message });
